@@ -6,7 +6,18 @@ import pandas as pd
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI(title='Data Audit API', description='Dataset quality, leakage, task and model readiness audit', version='1.1.0')
-app.add_middleware(CORSMiddleware, allow_origins=['http://localhost:5173', 'http://127.0.0.1:5173'], allow_credentials=True, allow_methods=['*'], allow_headers=['*'])
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    # Allows your deployed Vercel website, including Vercel preview URLs.
+    allow_origin_regex=r"https://.*[.]vercel[.]app",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 MODEL_TASK = {'logistic regression': 'classification', 'decision tree': 'classification', 'random forest': 'classification', 'gradient boosting': 'classification', 'xgboost': 'classification', 'support vector machine (svm)': 'classification', 'k-nearest neighbors (knn)': 'classification', 'naive bayes': 'classification', 'adaboost': 'classification', 'extra trees': 'classification', 'linear regression': 'regression', 'ridge regression': 'regression', 'lasso regression': 'regression', 'elastic net': 'regression', 'decision tree regressor': 'regression', 'random forest regressor': 'regression', 'gradient boosting regressor': 'regression', 'xgboost regressor': 'regression', 'support vector regression (svr)': 'regression', 'k-nearest neighbors regressor': 'regression', 'k-means': 'clustering', 'hierarchical clustering': 'clustering', 'dbscan': 'clustering', 'gaussian mixture model': 'clustering', 'mean shift': 'clustering', 'spectral clustering': 'clustering', 'arima': 'time-series', 'sarima': 'time-series', 'exponential smoothing': 'time-series', 'prophet': 'time-series', 'random forest (forecasting)': 'time-series', 'xgboost (forecasting)': 'time-series', 'lstm': 'time-series', 'isolation forest': 'anomaly', 'local outlier factor': 'anomaly', 'one-class svm': 'anomaly', 'autoencoder': 'anomaly', 'pca': 'dimensionality-reduction', 'kernel pca': 'dimensionality-reduction', 'truncated svd': 'dimensionality-reduction', 't-sne': 'dimensionality-reduction', 'umap': 'dimensionality-reduction', 'lda': 'dimensionality-reduction', 'collaborative filtering': 'recommendation', 'content-based filtering': 'recommendation', 'matrix factorization': 'recommendation', 'k-nearest neighbors': 'recommendation', 'hybrid recommendation': 'recommendation', 'learning to rank': 'ranking', 'ranknet': 'ranking', 'lambdamart': 'ranking', 'xgboost ranking': 'ranking'}
 TASK_DISPLAY = {'classification': 'classification', 'regression': 'regression', 'clustering': 'clustering', 'time-series': 'time-series forecasting', 'anomaly': 'anomaly detection', 'dimensionality-reduction': 'dimensionality reduction', 'recommendation': 'recommendation', 'ranking': 'ranking'}
 SUPERVISED = {'classification', 'regression', 'ranking', 'recommendation', 'time-series'}
