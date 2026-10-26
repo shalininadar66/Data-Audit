@@ -104,7 +104,10 @@ function App() {
       formData.append("intended_use", intendedUse.trim());
       formData.append("description", description.trim());
 
-      const response = await fetch("/api/audit", {
+      // Use the deployed FastAPI backend URL when VITE_API_URL is configured.
+      // If it is not configured (for local development), fall back to /api/audit.
+      const apiBaseUrl = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+      const response = await fetch(`${apiBaseUrl}/api/audit`, {
         method: "POST",
         body: formData,
         signal: controller.signal,
